@@ -1,0 +1,94 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    height: 100%;
+    width: 100%;
+
+    header {
+    background-color: black;
+
+    nav {
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-between;
+    background-color: black;
+    color: #fff;
+    padding: 0 25px;
+    position: sticky;
+
+    .gauche {
+    display: flex;
+    flex-wrap:wrap;
+
+    img {
+    padding-top: 5px;
+    }
+
+    .onglets{
+    display: flex;
+    flex-wrap:wrap;
+    margin-left: 10px;
+
+  a {
+    margin-left: 10px;
+    cursor:pointer;
+    color: #fff;
+    text-decoration: none;
+    padding: 20px;
+    }
+  a:hover{
+  color: orange;
+  }
+  }
+
+}
+  .droite{
+  display: flex;
+  flex-wrap:wrap;
+
+  a{
+  margin-right: 10px;
+  cursor:pointer;
+  padding: 20px;
+   }
+   a:hover {
+    color: orange;
+   }
+ }
+        }
+}
+
+#bannière {
+    background-image: url('./img/balthazar.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 400px;
+
+    .lecture {
+        bottom: 0;
+    }
+}
+
+  footer {
+  background-color: #000;
+  padding: 25px 100px;
+  color: #909191;
+
+  h5 {
+    color: white;
+    font-size: 20px;
+  }
+
+  .colonnes{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+}
+ 
+}
