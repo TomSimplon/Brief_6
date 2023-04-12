@@ -1,7 +1,6 @@
 {
   "name": "brief_6",
   "version": "1.0.0",
-  "description": "",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,5 +12,14 @@
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.8.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomSimplon/Brief_6.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TomSimplon/Brief_6/issues"
+  },
+  "homepage": "https://github.com/TomSimplon/Brief_6#readme",
+  "description": ""
 }
