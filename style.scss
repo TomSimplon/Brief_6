@@ -126,9 +126,6 @@ body {
   background-color: #191a1a;
   padding: 25px;
 
-  .section_tendances {
-      margin-bottom: 55px;
-
       h2 {
           color: #fff;
       }
@@ -136,22 +133,19 @@ body {
       .list {
         display:flex;
         overflow-x: auto;
-
-        a {
-          padding-left: 5px;
-          transition: transform 0.25s;
-
+          
           img {
-            height: 140px;
+            padding-left: 5px;
+            transition: transform 0.25s;
+            cursor: pointer;
           }
-        }
 
-        a:hover {
+        img:hover {
             transform:scale(1.05);
         }
       }
   }
-}
+
 
 // footer
   footer {
@@ -179,6 +173,10 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  nav .droite {
+    padding-left: 20px;
+  }
 }
 
 footer {
