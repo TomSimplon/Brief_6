@@ -12,6 +12,7 @@ body {
     background-color: black;
     position: sticky;
     top: 0;
+    z-index: 1;
 
     nav {
     display: flex;
@@ -120,6 +121,7 @@ body {
     }
 }
 
+// section films et séries
 #films-et-series {
   background-color: #191a1a;
   padding: 25px;
@@ -168,4 +170,22 @@ body {
   justify-content: space-between;
 }
 }
+}
+
+// Partie Responsive
+@media screen and (max-width: 640px) {
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 }
