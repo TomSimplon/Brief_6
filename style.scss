@@ -4,8 +4,6 @@ body {
     font-family: sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-    height: 100%;
-    width: 100%;
 
 // header et barre de navigation
     header {
@@ -166,6 +164,31 @@ body {
 }
 }
 
+// page search.html
+#search {
+  background-color: #191a1a;
+  padding: 25px;
+
+      h2 {
+          color: #fff;
+      }
+
+      .list {
+        display:flex;
+        flex-wrap: wrap;
+          
+          img {
+            padding: 15px;
+            transition: transform 0.25s;
+            cursor: pointer;
+          }
+
+        img:hover {
+            transform:scale(1.05);
+        }
+      }
+  }
+
 // Partie Responsive
 @media screen and (max-width: 640px) {
 header {
@@ -185,5 +208,4 @@ footer {
   align-items: center;
   justify-content: center;
 }
-
 }
