@@ -123,4 +123,46 @@ async function fetchSearchMovies() {
   }
 fetchSearchMovies();
 
+const infoButton: Element | null = document.querySelector('#bannière .info');
+infoButton.addEventListener('click', () => {
+  window.location.href = '/assets_html/info.html';
+});
+
+async function fetchBannerMovies() {
+  try {
+    // Fetch API pour récupérer les données
+    const movieId = 20108;
+    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
+    const result: Response = await fetch(url);
+    const data: any = await result.json();
+
+    const searchMovies = data.results;
+    searchMovies.forEach(movie => {
+      if (movie.poster_path !== null) {
+        console.log(movie.poster_path);
+
+        const infosBanniereSection = document.getElementById('#infos_bannière');
+        infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${data.poster_path})`;
+
+      }
+    });
+
+    // Mise à jour du titre de la page de recherche avec le contenu de la recherche
+      const title = data.original_title;
+      const releaseDate = data.release_date;
+      const synopsis = data.overview;
+      const actors = data.credits.cast.map(actor => actor.name).join(', ');
+      const genre = data.genres.map(genre => genre.name).join(', ');
+      const infosSection = document.getElementById('#infos');
+      infosSection.querySelector('h2').textContent = title;
+      infosSection.querySelector('.date').textContent += releaseDate;
+      infosSection.querySelector('.resume').textContent = synopsis;
+      infosSection.querySelector('.actors').textContent = `Distribution : ${actors}`;
+      infosSection.querySelector('.genre').textContent = `Genre : ${genre}`;
+  } catch (error) {
+    console.log(error);
+  }
+}
+fetchBannerMovies();
+
 
