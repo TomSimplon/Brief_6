@@ -1,18 +1,15 @@
 import { API_KEY } from './key';
-console.log(API_KEY);
 
 async function fetchPopularMovies() {
     try {
         // Fetch API pour récupérer les données
-        const result: Response = await fetch('https://api.themoviedb.org/3/movie/popular?api_key=09f0b9763031708ebb0cc2b63b5a13af&language=fr-FR&page=1')
+        const result: Response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`)
         const data: any = await result.json()
-        console.log(data);
 
         // Const récupere scroll
         const listDiv: Element | null = document.querySelector('#section_tendances .list');
         const popularMovies: any = data.results;
         popularMovies.forEach(movie => {
-        console.log(movie.poster_path);
 
         const domImg: HTMLImageElement = document.createElement('img');
         domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
@@ -31,14 +28,12 @@ fetchPopularMovies();
 async function fetchTopRatedMovies() {
     try {
         // Fetch API pour récupérer les données
-        const result: Response = await fetch('https://api.themoviedb.org/3/movie/top_rated?api_key=09f0b9763031708ebb0cc2b63b5a13af&language=en-US&page=1')
+        const result: Response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`)
         const data: any = await result.json()
-        console.log(data);
 
         const listDiv: Element | null = document.querySelector('#section_top_rated .list');
         const popularMovies: any = data.results;
         popularMovies.forEach(movie => {
-        console.log(movie.poster_path);
 
         const domImg: HTMLImageElement = document.createElement('img');
         domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
@@ -57,14 +52,12 @@ fetchTopRatedMovies();
 async function fetchTopUpcomingMovies() {
     try {
         // Fetch API pour récupérer les données
-        const result: Response = await fetch('https://api.themoviedb.org/3/movie/upcoming?api_key=09f0b9763031708ebb0cc2b63b5a13af&language=en-US&page=1')
+        const result: Response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`)
         const data: any = await result.json()
-        console.log(data);
 
         const listDiv: Element | null = document.querySelector('#section_upcoming .list');
         const popularMovies: any = data.results;
         popularMovies.forEach(movie => {
-        console.log(movie.poster_path);
 
         const domImg: HTMLImageElement = document.createElement('img');
         domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
@@ -83,6 +76,8 @@ fetchTopUpcomingMovies();
 // Import des éléments HTML nécessaires du formulaire de recherche dans le header
 const searchForm = document.querySelector('.search-form') as HTMLFormElement;
 const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+
+// Import des éléments nécessaires de la page search.html
 const pageTitle = document.querySelector('#search h2') as HTMLHeadingElement;
 const resultList = document.querySelector('#search .list') as HTMLDivElement;
 
@@ -108,7 +103,6 @@ async function fetchSearchMovies() {
       // Fetch API pour récupérer les données
       const result: Response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(searchContent)}`);
       const data: any = await result.json();
-      console.log(data);
   
       const searchMovies = data.results;
       searchMovies.forEach(movie => {
@@ -121,11 +115,12 @@ async function fetchSearchMovies() {
         }
       });
   
-      // Mettre à jour le titre de la page de recherche avec le contenu de la recherche
+      // Mise à jour du titre de la page de recherche avec le contenu de la recherche
       pageTitle.textContent = `Résultats pour "${searchContent}"`;
     } catch (error) {
       console.log(error);
     }
   }
-
 fetchSearchMovies();
+
+
