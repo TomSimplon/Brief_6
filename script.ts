@@ -1,76 +1,86 @@
 import { API_KEY } from './key';
 
 async function fetchPopularMovies() {
-    try {
-        // Fetch API pour récupérer les données
-        const result: Response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`)
-        const data: any = await result.json();
+  try {
+      // Fetch API pour récupérer les données
+      const result: Response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR&page=1`);
+      const data: any = await result.json();
 
-        // Const récupere scroll
-        const listDiv: Element | null = document.querySelector('#section_tendances .list');
-        const popularMovies: any = data.results;
-        popularMovies.forEach(movie => {
+      // Const récupere scroll
+      const listDiv: Element | null = document.querySelector('#section_tendances .list');
+      const popularMovies: any = data.results;
+      popularMovies.forEach(movie => {
 
-        const domImg: HTMLImageElement = document.createElement('img');
-        domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
-        domImg.id = movie.id;
-        listDiv?.appendChild(domImg);
-    });
+          const domImg: HTMLImageElement = document.createElement('img');
+          domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
+          domImg.id = movie.id.toString();
+          listDiv?.appendChild(domImg);
+      });
 
-    // Récupération des id des films
-    async function getmoviebyId (movie_id) {
-    const movierequest = await fetch (`https://api.themoviedb.org/3/movie/${movie_id}?api_key=${API_KEY}&language=fr-FR`);
-    const datamovierequest = await movierequest.json();
-    return datamovierequest;
-    }
+      // Récupération des id des films
+      async function getmoviebyId (movieId) {
+          const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
+          const datamovierequest = await movierequest.json();
+          return datamovierequest;
+      }
 
-    // Récupère les informations du film pour les afficher dans les div correspondantes
-    function displayMovieInfo(movie: any): void {
-    const infosSection: HTMLElement | null = document.getElementById('infos');
-    const title: any = movie.original_title;
-    const date: any = movie.release_date;
-    const resume: any = movie.overview;
-    const actors: any = movie.credits.cast;
-    const genre: any = movie.genres;
-    const rated: any = movie.vote_average;
-    
-    if(infosSection) {
-    console.log(infosSection);
-    infosSection.querySelector('h2').textContent = title;
-    console.log(title);
-    infosSection.querySelector('.date').textContent += date;
-    console.log(date);
-    infosSection.querySelector('.resume').textContent = resume;
-    console.log(resume);
-    infosSection.querySelector('.actors').textContent = `Distribution : ${actors.map((actor: any) => actor.name).join(', ')}`;
-    console.log(actors);
-    infosSection.querySelector('.genre').textContent = `Genre : ${genre.map((genre: any) => genre.name).join(', ')}`;
-    console.log(genre);
-    infosSection.querySelector('.rated').textContent = `Recommandé à ${rated}%`;
-    console.log(rated);
-    const infosBanniereSection: HTMLElement | null = document.getElementById('infos_bannière');
-    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
-    }
-   }
+      // Récupère les informations du film pour les afficher dans les div correspondantes
+      function displayMovieInfo(movie: any): void {
+          const title = document.querySelector('#infos h2') as HTMLHeadingElement;
+          const date = document.querySelector('#infos .date') as HTMLElement;
+          const resume = document.querySelector('#infos .resume') as HTMLElement;
+          const actors = document.querySelector('#infos .actors') as HTMLElement;
+          const genre = document.querySelector('#infos .genre') as HTMLElement;
+          const rated = document.querySelector('#infos .rated') as HTMLElement;
+          const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
 
-   // Récupération des images et ajout d'un écouteur d'événements sur chaque image
-   const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-   console.log(images)
-   images.forEach(image => {
-    image.addEventListener('click', async (e) => {
-    // Récupération des informations du film
-    console.log(e.target.id);
-    const movie: any = await getmoviebyId(e.target.id);
-    // Affichage des informations du film sur la page info.html
-    displayMovieInfo(movie);    
-    // Redirection vers la page info.html
-    window.location.href = '/assets_html/info.html';
-    });
-  });
+          if (title !== null) {
+            title.textContent = movie.original_title;
+          }
+          console.log(title);
+          
+          if (date !== null) {
+            date.textContent = movie.release_date;
+          }
+                    
+          if (resume !== null) {
+            resume.textContent = movie.overview;
+          }
+          
+          if (actors !== null) {
+            actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
+          }
+          
+          if (genre !== null) {
+            genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
+          }
+          
+          if (rated !== null) {
+            rated.textContent = `Recommandé à ${movie.vote_average}%`;
+          }
+          
+          if (infosBanniereSection !== null) {
+            infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
+          }
+      }
 
-    } catch (error) {
-        console.log(error)
-    }
+      // Récupération des images et ajout d'un écouteur d'événements sur chaque image
+      const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+      console.log(images);
+      images.forEach(image => {
+          image.addEventListener('click', async () => {
+              const movieId = image.id;
+              console.log(movieId);
+              const movie: any = await getmoviebyId(movieId);
+              console.log(movie);
+              displayMovieInfo(movie);
+             // window.location.href = '/assets_html/info.html';
+          });
+      });
+
+  } catch (error) {
+      console.log(error)
+  }
 }
 
 // Execute la fonction pour fetch les films à tendance
@@ -88,37 +98,70 @@ async function fetchTopRatedMovies() {
 
         const domImg: HTMLImageElement = document.createElement('img');
         domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
+        domImg.id = movie.id.toString();
         listDiv?.appendChild(domImg);
 
     });
 
-     // Récupère les informations du film pour les afficher dans les div correspondantes
-    function displayMovieInfo(movie: any): void {
-    const infosSection: HTMLElement | null = document.getElementById('infos');
-    if(infosSection) {
-    infosSection.querySelector('h2').textContent = movie.original_title;
-    infosSection.querySelector('.date').textContent += movie.release_date;
-    infosSection.querySelector('.resume').textContent = movie.overview;
-    infosSection.querySelector('.actors').textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-    infosSection.querySelector('.genre').textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-    infosSection.querySelector('.rated').textContent = `Recommandé à ${movie.vote_average}%`;
-    const infosBanniereSection: HTMLElement | null = document.getElementById('infos_bannière');
-    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
-    }
-   }
+     // Récupération des id des films
+     async function getmoviebyId (movieId) {
+      const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
+      const datamovierequest = await movierequest.json();
+      return datamovierequest;
+  }
 
-   // Récupération des images et ajout d'un écouteur d'événements sur chaque image
-   const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-   console.log(images)
-   images.forEach(image => {
-    image.addEventListener('click', async () => {  // Ajout du paramètre event
-    // Récupération des informations du film
-    const movie: any = await fetchTopRatedMovies();
-    // Affichage des informations du film sur la page info.html
-     displayMovieInfo(movie);
-    // Redirection vers la page info.html
-    window.location.href = '/assets_html/info.html';
-    });
+  // Récupère les informations du film pour les afficher dans les div correspondantes
+  function displayMovieInfo(movie: any): void {
+      const title = document.querySelector('#infos h2') as HTMLHeadingElement;
+      const date = document.querySelector('#infos .date') as HTMLElement;
+      const resume = document.querySelector('#infos .resume') as HTMLElement;
+      const actors = document.querySelector('#infos .actors') as HTMLElement;
+      const genre = document.querySelector('#infos .genre') as HTMLElement;
+      const rated = document.querySelector('#infos .rated') as HTMLElement;
+      const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
+
+      
+      if (title) {
+        title.textContent = movie.original_title;
+      }
+      console.log(title);
+      
+      if (date) {
+        date.textContent = movie.release_date;
+      }
+      console.log(date);
+                
+      if (resume) {
+        resume.textContent = movie.overview;
+      }
+      
+      if (actors) {
+        actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
+      }
+      
+      if (genre) {
+        genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
+      }
+      
+      if (rated) {
+        rated.textContent = `Recommandé à ${movie.vote_average}%`;
+      }
+      
+      if (infosBanniereSection) {
+        infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
+      }
+  }
+
+  // Récupération des images et ajout d'un écouteur d'événements sur chaque image
+  const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+  images.forEach(image => {
+      image.addEventListener('click', async () => {
+          const movieId = image.id;
+          const movie: any = await getmoviebyId(movieId);
+          displayMovieInfo(movie);
+          await new Promise(resolve => setTimeout(resolve, 100)); // attendre un peu avant de rediriger
+        //  window.location.href = '/assets_html/info.html';
+      });
   });
 
     } catch (error) {
@@ -141,37 +184,69 @@ async function fetchTopUpcomingMovies() {
 
         const domImg: HTMLImageElement = document.createElement('img');
         domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
+        domImg.id = movie.id.toString();
         listDiv?.appendChild(domImg);
 
   });
 
-     // Récupère les informations du film pour les afficher dans les div correspondantes
-    function displayMovieInfo(movie: any): void {
-    const infosSection: HTMLElement | null = document.getElementById('infos');
-    if(infosSection) {
-    infosSection.querySelector('h2').textContent = movie.original_title;
-    infosSection.querySelector('.date').textContent += movie.release_date;
-    infosSection.querySelector('.resume').textContent = movie.overview;
-    infosSection.querySelector('.actors').textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-    infosSection.querySelector('.genre').textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-    infosSection.querySelector('.rated').textContent = `Recommandé à ${movie.vote_average}%`;
-    const infosBanniereSection: HTMLElement | null = document.getElementById('infos_bannière');
-    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
-    }
-   }
+     // Récupération des id des films
+     async function getmoviebyId (movieId) {
+      const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
+      const datamovierequest = await movierequest.json();
+      return datamovierequest;
+  }
 
-   // Récupération des images et ajout d'un écouteur d'événements sur chaque image
-   const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-   console.log(images)
-   images.forEach(image => {
-    image.addEventListener('click', async () => {  // Ajout du paramètre event
-    const movie: any = await fetchTopUpcomingMovies();
-    // Affichage des informations du film sur la page info.html
-     displayMovieInfo(movie);
-    // Redirection vers la page info.html
-    window.location.href = '/assets_html/info.html';
-    });
+  // Récupère les informations du film pour les afficher dans les div correspondantes
+function displayMovieInfo(movie: any): void {
+  const title = document.querySelector('#infos h2') as HTMLHeadingElement;
+  const date = document.querySelector('#infos .date') as HTMLElement;
+  const resume = document.querySelector('#infos .resume') as HTMLElement;
+  const actors = document.querySelector('#infos .actors') as HTMLElement;
+  const genre = document.querySelector('#infos .genre') as HTMLElement;
+  const rated = document.querySelector('#infos .rated') as HTMLElement;
+  const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
+
+  if (title) {
+    title.textContent = movie.original_title;
+  }
+  
+  if (date) {
+    date.textContent = movie.release_date;
+  }
+  
+  if (resume) {
+    resume.textContent = movie.overview;
+  }
+  
+  if (actors) {
+    actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
+  }
+  
+  if (genre) {
+    genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
+  }
+  
+  if (rated) {
+    rated.textContent = `Recommandé à ${movie.vote_average}%`;
+  }
+  
+  if (infosBanniereSection) {
+    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
+  }
+}
+
+// Récupération des images et ajout d'un écouteur d'événements sur chaque image
+const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+images.forEach(image => {
+  image.addEventListener('click', async () => {
+    const movieId = image.id;
+    const movie: any = await getmoviebyId(movieId);
+    displayMovieInfo(movie);
+    await new Promise(resolve => setTimeout(resolve, 100)); // attendre un peu avant de rediriger
+   // window.location.href = '/assets_html/info.html';
   });
+});
+
 
     } catch (error) {
         console.log(error)
@@ -226,36 +301,70 @@ async function fetchSearchMovies(page: number) {
   
           const domImg: HTMLImageElement = document.createElement('img');
           domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
+          domImg.id = movie.id.toString();
           resultList?.appendChild(domImg);
         }
       });
 
-       // Récupère les informations du film pour les afficher dans les div correspondantes
-    function displayMovieInfo(movie: any): void {
-    const infosSection: HTMLElement | null = document.getElementById('infos');
-    if(infosSection) {
-    infosSection.querySelector('h2').textContent = movie.original_title;
-    infosSection.querySelector('.date').textContent += movie.release_date;
-    infosSection.querySelector('.resume').textContent = movie.overview;
-    infosSection.querySelector('.actors').textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-    infosSection.querySelector('.genre').textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-    infosSection.querySelector('.rated').textContent = `Recommandé à ${movie.vote_average}%`;
-    const infosBanniereSection: HTMLElement | null = document.getElementById('infos_bannière');
-    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
+       // Récupération des id des films
+      async function getmoviebyId (movieId) {
+        const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
+        const datamovierequest = await movierequest.json();
+        return datamovierequest;
     }
-   }
 
-   // Récupération des images et ajout d'un écouteur d'événements sur chaque image
-   const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-   console.log(images)
-   images.forEach(image => {
-    image.addEventListener('click', async () => {  // Ajout du paramètre event
-    const movie: any = await fetchSearchMovies(page);
-    // Affichage des informations du film sur la page info.html
-     displayMovieInfo(movie);
-    // Redirection vers la page info.html
-    window.location.href = '/assets_html/info.html';
-    });
+    // Récupère les informations du film pour les afficher dans les div correspondantes
+    function displayMovieInfo(movie: any): void {
+        const title = document.querySelector('#infos h2') as HTMLHeadingElement;
+        const date = document.querySelector('#infos .date') as HTMLElement;
+        const resume = document.querySelector('#infos .resume') as HTMLElement;
+        const actors = document.querySelector('#infos .actors') as HTMLElement;
+        const genre = document.querySelector('#infos .genre') as HTMLElement;
+        const rated = document.querySelector('#infos .rated') as HTMLElement;
+        const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
+
+        
+        if (title) {
+          title.textContent = movie.original_title;
+        }
+        console.log(title);
+        
+        if (date) {
+          date.textContent = movie.release_date;
+        }
+        console.log(date);
+                  
+        if (resume) {
+          resume.textContent = movie.overview;
+        }
+        
+        if (actors) {
+          actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
+        }
+        
+        if (genre) {
+          genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
+        }
+        
+        if (rated) {
+          rated.textContent = `Recommandé à ${movie.vote_average}%`;
+        }
+        
+        if (infosBanniereSection) {
+          infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
+        }
+    }
+
+    // Récupération des images et ajout d'un écouteur d'événements sur chaque image
+    const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+    images.forEach(image => {
+        image.addEventListener('click', async () => {
+            const movieId = image.id;
+            const movie: any = await getmoviebyId(movieId);
+            displayMovieInfo(movie);
+            await new Promise(resolve => setTimeout(resolve, 100)); // attendre un peu avant de rediriger
+           // window.location.href = '/assets_html/info.html';
+        });
   });
   
       // Mise à jour du titre de la page de recherche avec le contenu de la recherche
