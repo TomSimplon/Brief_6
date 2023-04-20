@@ -1,5 +1,7 @@
 import { API_KEY } from './key';
 
+// Affichage des films dans la page d'accueil
+
 async function fetchPopularMovies() {
   try {
       // Fetch API pour récupérer les données
@@ -17,66 +19,14 @@ async function fetchPopularMovies() {
           listDiv?.appendChild(domImg);
       });
 
-      // Récupération des id des films
-      async function getmoviebyId (movieId) {
-          const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
-          const datamovierequest = await movierequest.json();
-          return datamovierequest;
-      }
-
-      // Récupère les informations du film pour les afficher dans les div correspondantes
-      function displayMovieInfo(movie: any): void {
-          const title = document.querySelector('#infos h2') as HTMLHeadingElement;
-          const date = document.querySelector('#infos .date') as HTMLElement;
-          const resume = document.querySelector('#infos .resume') as HTMLElement;
-          const actors = document.querySelector('#infos .actors') as HTMLElement;
-          const genre = document.querySelector('#infos .genre') as HTMLElement;
-          const rated = document.querySelector('#infos .rated') as HTMLElement;
-          const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
-
-          if (title !== null) {
-            title.textContent = movie.original_title;
-          }
-          console.log(title);
-          
-          if (date !== null) {
-            date.textContent = movie.release_date;
-          }
-                    
-          if (resume !== null) {
-            resume.textContent = movie.overview;
-          }
-          
-          if (actors !== null) {
-            actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-          }
-          
-          if (genre !== null) {
-            genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-          }
-          
-          if (rated !== null) {
-            rated.textContent = `Recommandé à ${movie.vote_average}%`;
-          }
-          
-          if (infosBanniereSection !== null) {
-            infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
-          }
-      }
-
       // Récupération des images et ajout d'un écouteur d'événements sur chaque image
       const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-      console.log(images);
       images.forEach(image => {
-          image.addEventListener('click', async () => {
-              const movieId = image.id;
-              console.log(movieId);
-              const movie: any = await getmoviebyId(movieId);
-              console.log(movie);
-              displayMovieInfo(movie);
-              window.location.href = '/assets_html/info.html';
-          });
-      });
+      image.addEventListener('click', async () => {
+        const movieId = image.id;
+        window.location.href = `/assets_html/info.html?id=${encodeURIComponent(movieId)}`;
+    });
+  });
 
   } catch (error) {
       console.log(error)
@@ -103,65 +53,13 @@ async function fetchTopRatedMovies() {
 
     });
 
-     // Récupération des id des films
-     async function getmoviebyId (movieId) {
-      const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
-      const datamovierequest = await movierequest.json();
-      return datamovierequest;
-  }
-
-  // Récupère les informations du film pour les afficher dans les div correspondantes
-  function displayMovieInfo(movie: any): void {
-      const title = document.querySelector('#infos h2') as HTMLHeadingElement;
-      const date = document.querySelector('#infos .date') as HTMLElement;
-      const resume = document.querySelector('#infos .resume') as HTMLElement;
-      const actors = document.querySelector('#infos .actors') as HTMLElement;
-      const genre = document.querySelector('#infos .genre') as HTMLElement;
-      const rated = document.querySelector('#infos .rated') as HTMLElement;
-      const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
-
-      
-      if (title) {
-        title.textContent = movie.original_title;
-      }
-      console.log(title);
-      
-      if (date) {
-        date.textContent = movie.release_date;
-      }
-      console.log(date);
-                
-      if (resume) {
-        resume.textContent = movie.overview;
-      }
-      
-      if (actors) {
-        actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-      }
-      
-      if (genre) {
-        genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-      }
-      
-      if (rated) {
-        rated.textContent = `Recommandé à ${movie.vote_average}%`;
-      }
-      
-      if (infosBanniereSection) {
-        infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
-      }
-  }
-
-  // Récupération des images et ajout d'un écouteur d'événements sur chaque image
-  const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-  images.forEach(image => {
-      image.addEventListener('click', async () => {
-          const movieId = image.id;
-          const movie: any = await getmoviebyId(movieId);
-          displayMovieInfo(movie);
-          await new Promise(resolve => setTimeout(resolve, 100)); // attendre un peu avant de rediriger
-        //  window.location.href = '/assets_html/info.html';
-      });
+    // Récupération des images et ajout d'un écouteur d'événements sur chaque image
+    const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+    images.forEach(image => {
+    image.addEventListener('click', async () => {
+      const movieId = image.id;
+      window.location.href = `/assets_html/info.html?id=${encodeURIComponent(movieId)}`;
+    });
   });
 
     } catch (error) {
@@ -189,64 +87,14 @@ async function fetchTopUpcomingMovies() {
 
   });
 
-     // Récupération des id des films
-     async function getmoviebyId (movieId) {
-      const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
-      const datamovierequest = await movierequest.json();
-      return datamovierequest;
-  }
-
-  // Récupère les informations du film pour les afficher dans les div correspondantes
-function displayMovieInfo(movie: any): void {
-  const title = document.querySelector('#infos h2') as HTMLHeadingElement;
-  const date = document.querySelector('#infos .date') as HTMLElement;
-  const resume = document.querySelector('#infos .resume') as HTMLElement;
-  const actors = document.querySelector('#infos .actors') as HTMLElement;
-  const genre = document.querySelector('#infos .genre') as HTMLElement;
-  const rated = document.querySelector('#infos .rated') as HTMLElement;
-  const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
-
-  if (title) {
-    title.textContent = movie.original_title;
-  }
-  
-  if (date) {
-    date.textContent = movie.release_date;
-  }
-  
-  if (resume) {
-    resume.textContent = movie.overview;
-  }
-  
-  if (actors) {
-    actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-  }
-  
-  if (genre) {
-    genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-  }
-  
-  if (rated) {
-    rated.textContent = `Recommandé à ${movie.vote_average}%`;
-  }
-  
-  if (infosBanniereSection) {
-    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.poster_path})`;
-  }
-}
-
-// Récupération des images et ajout d'un écouteur d'événements sur chaque image
-const images: NodeListOf<Element> = document.querySelectorAll('.list img');
-images.forEach(image => {
-  image.addEventListener('click', async () => {
-    const movieId = image.id;
-    const movie: any = await getmoviebyId(movieId);
-    displayMovieInfo(movie);
-    await new Promise(resolve => setTimeout(resolve, 100)); // attendre un peu avant de rediriger
-   // window.location.href = '/assets_html/info.html';
-  });
-});
-
+     // Récupération des images et ajout d'un écouteur d'événements sur chaque image
+     const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+     images.forEach(image => {
+     image.addEventListener('click', async () => {
+       const movieId = image.id;
+       window.location.href = `/assets_html/info.html?id=${encodeURIComponent(movieId)}`;
+     });
+   });
 
     } catch (error) {
         console.log(error)
@@ -255,7 +103,6 @@ images.forEach(image => {
 
 // Execute la fonction pour fetch les films à venir
 fetchTopUpcomingMovies();
-
 
 
 // Barre de recherche et pagination
@@ -286,8 +133,6 @@ async function fetchSearchMovies(page: number) {
     resultList.innerHTML = '';
     searchMovies.forEach(movie => {
       if (movie.poster_path !== null) {
-        console.log(movie.poster_path);
-
         const domImg: HTMLImageElement = document.createElement('img');
         domImg.setAttribute('src', 'https://image.tmdb.org/t/p/w185' + movie.poster_path);
         domImg.id = movie.id.toString();
@@ -363,6 +208,100 @@ searchForm.addEventListener('submit', async (event) => {
     window.location.href = `/assets_html/search.html?q=${encodeURIComponent(searchContent)}`;
   }
 });
+
+
+// Récupération et affichage des informations des films dans la page info.html
+// Récupération des id des films
+async function getmoviebyId (movieId) {
+  const movierequest = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
+  const datamovierequest = await movierequest.json();
+  return datamovierequest;
+}
+
+// Récupère les informations du film pour les afficher dans les div correspondantes
+function displayMovieInfo(movie: any): void {
+  console.log(movie);
+  const title = document.querySelector('#infos h2') as HTMLHeadingElement;
+  const date = document.querySelector('#infos .date') as HTMLElement;
+  const resume = document.querySelector('#infos .resume') as HTMLElement;
+  const actors = document.querySelector('#infos .actors') as HTMLElement;
+  const genre = document.querySelector('#infos .genre') as HTMLElement;
+  const rated = document.querySelector('#infos .rated') as HTMLElement;
+  const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
+
+  if (title !== null) {
+    title.textContent = movie.title;
+  }
+  
+  if (date !== null) {
+    date.textContent = new Date(movie.release_date).toLocaleDateString('fr-FR');
+  }
+            
+  if (resume !== null) {
+    resume.textContent = movie.overview;
+  }
+  
+  if (actors !== null) {
+    actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
+  }
+  
+  if (genre !== null) {
+    genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
+  }
+  
+  if (rated !== null) {
+    rated.textContent = `Recommandé à ${movie.vote_average}%`;
+  }
+  
+  if (infosBanniereSection !== null) {
+    infosBanniereSection.style.backgroundImage = `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})`;
+  }
+}
+
+const infoParams: URLSearchParams = new URLSearchParams(window.location.search);
+const infoContent = infoParams.get('id') ?? '';
+if (infoContent) {
+  async function test () {
+    const movie: any = await getmoviebyId(infoContent);
+    displayMovieInfo(movie);  
+  }
+  test ();
+}
+
+const audio: HTMLAudioElement | null = document.querySelector('#audio');
+const gif: Element | null = document.querySelector('#gif');
+const balthazar = document.querySelector('#balthazar');
+function playaudio () {
+  if (audio) {
+    audio.play();
+  }
+}
+
+function playbalthazar () {
+  if(balthazar) {
+    balthazar.play();
+  }
+}
+
+const play: Element | null = document.querySelector('.play');
+if (play) {
+  play.addEventListener('click', () => {
+    gif.classList.remove('hidden');
+    playaudio();
+    setTimeout(() => {
+      gif.classList.add('hidden');
+    }, 3000); 
+  });
+}
+
+const info = document.querySelector('.info');
+if(info) {
+  info.addEventListener('click', () => {
+    playbalthazar();
+  })
+}
+
+
 
 
 

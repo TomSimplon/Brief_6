@@ -5,6 +5,10 @@ body {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 
+    #gif.hidden {
+      display: none;
+    }
+
 // header et barre de navigation
     header {
     background-color: black;
@@ -91,32 +95,45 @@ body {
 
 // section bannière
 #bannière {
-    background-image: url('./img/balthazar.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  position: relative; // Ajoutez cette ligne pour que la div #gif soit positionnée par rapport à #bannière
+  background-image: url('./img/balthazar.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 400px;
+
+  #gif { 
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 400px;
-    cursor: pointer;
-
-    .lecture {
-    padding-top: 300px;
-    padding-left: 50px;
-
-    button {
-      margin: 20px;
-      padding: 20px;
-      font-size: 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      border: none;
+    height: 100%;
+    
+    img {
+      width: 100%;
+      height: 100%;
     }
+  }
 
-    .info {
-        background-color: dimgray;
-        color: white;
+  .lecture {
+      padding-top: 300px;
+      padding-left: 50px;
+
+      button {
+        margin: 20px;
+        padding: 20px;
+        font-size: 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        border: none;
       }
-    }
+
+      .info {
+          background-color: dimgray;
+          color: white;
+      }
+  }
 }
 
 // section films et séries
@@ -264,5 +281,20 @@ footer {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#infos .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .contenu {
+    flex-direction: column;
+
+    .right {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
 }
 }
