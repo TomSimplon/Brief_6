@@ -117,18 +117,18 @@ const searchInput = document.querySelector('input[type="text"]') as HTMLInputEle
 
 // Constantes pour gérer la pagination
 const PAGE_SIZE = 20;
-let currentPage: number = 1;
+let page: number = 1;
 let totalResults: number = 0;
 let searchContent: string = '';
 
 // Fonction pour récupérer les films de la recherche
-async function fetchSearchMovies(page: number) {
+async function fetchSearchMovies() {
   try {
     // Fetch API pour récupérer les données
     const result: Response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(searchContent)}&page=${page}`);
     const data: any = await result.json();
 
-    const searchMovies = data.results;
+    const searchMovies: any = data.results;
     totalResults = data.total_results;
     resultList.innerHTML = '';
     searchMovies.forEach(movie => {
@@ -140,21 +140,41 @@ async function fetchSearchMovies(page: number) {
       }
     });
 
+    // Récupération des images et ajout d'un écouteur d'événements sur chaque image
+      const images: NodeListOf<Element> = document.querySelectorAll('.list img');
+      images.forEach(image => {
+      image.addEventListener('click', async () => {
+        const movieId: string = image.id;
+        window.location.href = `/assets_html/info.html?id=${encodeURIComponent(movieId)}`;
+    });
+  });
+
     // Mise à jour du titre de la page de recherche avec le contenu de la recherche
     pageTitle.textContent = `Résultats pour "${searchContent}"`;
 
     // Mise à jour de la pagination
-    const totalPages = Math.ceil(totalResults / PAGE_SIZE);
-    if(totalPages === 1) {
-      previousPageButton.disabled
+    const totalPages: number = Math.ceil(totalResults / PAGE_SIZE);
+    if(page === 1) {
+    previousPageButton.disabled 
+    previousPageButton.classList.add('hidden');
+    } else {
+    previousPageButton.classList.remove('hidden');
     }
-     if(currentPage === totalPages) {
-      nextPageButton.disabled
+     if(page === totalPages) {
+      nextPageButton.disabled 
+      nextPageButton.classList.add('hidden');
      }
-    pageNumber.textContent = currentPage.toString();
+    pageNumber.textContent = ` Page ${page}`.toString();
   } catch (error) {
     console.log(error);
   }
+}
+
+// Récupération du contenu de la recherche à partir de l'URL
+const searchParams: URLSearchParams = new URLSearchParams(window.location.search);
+searchContent = searchParams.get('q') ?? '';
+if (searchContent) {
+  fetchSearchMovies();
 }
 
 // Ajout d'un événement submit au formulaire de recherche
@@ -170,19 +190,12 @@ searchForm.addEventListener('submit', async (event) => {
   }
 });
 
-// Récupération du contenu de la recherche à partir de l'URL
-const searchParams: URLSearchParams = new URLSearchParams(window.location.search);
-searchContent = searchParams.get('q') ?? '';
-if (searchContent) {
-  fetchSearchMovies(currentPage);
-}
-
 // Ajout d'un événement "click" sur les boutons de pagination
 if (previousPageButton) {
   previousPageButton.addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      fetchSearchMovies(currentPage);
+    if (page > 1) {
+      page--;
+      fetchSearchMovies();
     }
   });
 }
@@ -190,24 +203,12 @@ if (previousPageButton) {
 if (nextPageButton) {
   nextPageButton.addEventListener('click', () => {
     const totalPages = Math.ceil(totalResults / PAGE_SIZE);
-    if (currentPage < totalPages) {
-      currentPage++;
-      fetchSearchMovies(currentPage);
+    if (page < totalPages) {
+      page++;
+      fetchSearchMovies();
     }
   });
 }
-
-searchForm.addEventListener('submit', async (event) => {
-  // Empêche le comportement par défaut du formulaire
-  event.preventDefault();
-
-  // Récupére le contenu de la recherche
-  const searchContent: string = searchInput.value.trim();
-  if (searchContent) {
-    // Rediriger vers la page de recherche
-    window.location.href = `/assets_html/search.html?q=${encodeURIComponent(searchContent)}`;
-  }
-});
 
 
 // Récupération et affichage des informations des films dans la page info.html

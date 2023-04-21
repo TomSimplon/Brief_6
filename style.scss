@@ -5,7 +5,7 @@ body {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 
-    #gif.hidden {
+    #gif.hidden, #previous-page.hidden, #next-page.hidden {
       display: none;
     }
 
@@ -202,6 +202,30 @@ body {
 
         img:hover {
             transform:scale(1.05);
+        }
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+
+        button {
+        padding: 10px;
+        background-color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        color: black;
+        font-size: 1rem;
+        font-weight: bold;
+
+        &:hover {
+        border: 2px solid orange;
+        }
+        }
+
+        span {
+          padding: 10px;
+          color: white;
+          font-weight: bold;
         }
       }
   }
