@@ -1,1 +1,1 @@
-export const API_KEY = 'INSERT HERE YOUR KEY API';
+export const API_KEY = 'INSERT HERE YOUR API KEY';

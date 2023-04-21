@@ -239,6 +239,7 @@ body {
   width: 100%;
   height: 400px;
   cursor: pointer;
+  object-fit: cover;
 
   .lecture {
   padding-top: 300px;
@@ -271,17 +272,9 @@ body {
     .contenu {
       display: flex;
       justify-content: space-between;
-  
-      .left {
-  
-        h5 {
-          font-size: 20px;
-        }
-      }
-  
-      .right {
-        margin-left: 200px;
-        margin-right: 50px;
+
+      h5 {
+        font-size: 20px;
       }
     }
   }

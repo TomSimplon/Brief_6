@@ -225,9 +225,6 @@ function displayMovieInfo(movie: any): void {
   const title = document.querySelector('#infos h2') as HTMLHeadingElement;
   const date = document.querySelector('#infos .date') as HTMLElement;
   const resume = document.querySelector('#infos .resume') as HTMLElement;
-  const actors = document.querySelector('#infos .actors') as HTMLElement;
-  const genre = document.querySelector('#infos .genre') as HTMLElement;
-  const rated = document.querySelector('#infos .rated') as HTMLElement;
   const infosBanniereSection = document.querySelector('#infos_bannière') as HTMLElement;
 
   if (title !== null) {
@@ -240,18 +237,6 @@ function displayMovieInfo(movie: any): void {
             
   if (resume !== null) {
     resume.textContent = movie.overview;
-  }
-  
-  if (actors !== null) {
-    actors.textContent = `Distribution : ${movie.credits.cast.map((actor: any) => actor.name).join(', ')}`;
-  }
-  
-  if (genre !== null) {
-    genre.textContent = `Genre : ${movie.genres.map((genre: any) => genre.name).join(', ')}`;
-  }
-  
-  if (rated !== null) {
-    rated.textContent = `Recommandé à ${movie.vote_average}%`;
   }
   
   if (infosBanniereSection !== null) {
@@ -269,6 +254,7 @@ if (infoContent) {
   test ();
 }
 
+// Mise en place des audios
 const audio: HTMLAudioElement | null = document.querySelector('#audio');
 const gif: Element | null = document.querySelector('#gif');
 const balthazar = document.querySelector('#balthazar');
