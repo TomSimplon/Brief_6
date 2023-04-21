@@ -210,7 +210,6 @@ if (nextPageButton) {
   });
 }
 
-
 // Récupération et affichage des informations des films dans la page info.html
 // Récupération des id des films
 async function getmoviebyId (movieId) {
@@ -221,7 +220,6 @@ async function getmoviebyId (movieId) {
 
 // Récupère les informations du film pour les afficher dans les div correspondantes
 function displayMovieInfo(movie: any): void {
-  console.log(movie);
   const title = document.querySelector('#infos h2') as HTMLHeadingElement;
   const date = document.querySelector('#infos .date') as HTMLElement;
   const resume = document.querySelector('#infos .resume') as HTMLElement;
